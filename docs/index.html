@@ -59,7 +59,7 @@
         <li><a href="#router">Router</a></li>
         <li><a href="#energize">Energize</a></li>
         <li><a href="#click">Click</a></li>
-        <li><a href="#dragdrop">Drag & Drop</a></li>
+        <li><a href="#dragdrop">File targets</a></li>
         <li><a href="https://www.github.com/timendus/thimbleful">Find me on Github</a></li>
       </ul>
     </nav>
@@ -88,16 +88,15 @@
       <p>So, in the spirit of <a href="http://vanilla-js.com/">Vanilla JS</a> I guess this
       collection of snippets is my attempt at a non-framework framework 🎈</p>
 
-      <h2>"Design considerations"</h2>
+      <h2>What is it?</h2>
 
-      <p>Thimbleful consists of a few very simple classes, the longest of which is 95 lines of code (including documentation). These classes adhere to a few principles:</p>
+      <p>Thimbleful consists of a handful of Javascript classes, the longest of which
+      is 95 lines of code, including documentation. These classes adhere to a few principles:</p>
 
       <ul>
-        <li>Keep it simple</li>
-        <li>Keep it small</li>
+        <li>Keep it small & flexible</li>
         <li>Don't be (too) "smart"</li>
-        <li>Don't presume anything about the user's context (be configurable)</li>
-        <li>Don't introduce unnecessary dependencies</li>
+        <li>Don't introduce any dependencies</li>
         <li>Only attach event handlers to `document` or `window`</li>
       </ul>
 
@@ -106,6 +105,11 @@
       Thimbleful with any Javascript templating engine you like or just manipulate
       the DOM from Javascript yourself.</p>
 
+      <p class="next-page">
+        <a href="#importing">Next up: Importing &raquo;</a>
+      </p>
+
+      <p>&nbsp;</p>
       <p><small>Header image by <a href="https://www.flickr.com/photos/24495423@N04/">Chris Hertel</a>, <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> licensed.</small></p>
 
     </section>
@@ -118,7 +122,7 @@
 
       <section class="example narrow">
         <section>
-          <p>Option A: install the package as a dependency.</p>
+          <p><b>Option A:</b> install the package as a dependency.</p>
 
           <pre><code class="bash">
 npm install thimbleful
@@ -128,18 +132,22 @@ npm install thimbleful
 import Thimbleful from 'thimbleful';
           </code></pre>
 
-          <p>Option B: <a href="https://github.com/Timendus/thimbleful/raw/master/dist/thimbleful.min.js">download</a> the minified version and add Thimbleful to your project:</p>
+          <p><b>Option B:</b> <a href="https://github.com/Timendus/thimbleful/raw/master/dist/thimbleful.min.js">download</a> the minified version and add Thimbleful to your project:</p>
 
           <pre><code class="html">
 &lt;script src="thimbleful.min.js"&gt;&lt;/script&gt;
           </code></pre>
 
-          <p>Option C: link to the hosted version:</p>
+          <p><b>Option C:</b> link to the hosted version:</p>
           <pre><code class="html">
 &lt;script src="https://timendus.github.io/thimbleful/thimbleful.min.js"&gt;&lt;/script&gt;
           </code></pre>
         </section>
       </section>
+
+      <p class="next-page">
+        <a href="#router">Next up: Routing &raquo;</a>
+      </p>
 
     </section>
 
@@ -236,6 +244,10 @@ router.addRoute(/admin\/users\/(\d+)/, (route, matches, e) => {
         </section>
       </section>
 
+      <p class="next-page">
+        <a href="#energize">Next up: Making your pages come alive &raquo;</a>
+      </p>
+
     </section>
 
 
@@ -313,6 +325,10 @@ router.addRoute(/admin\/users\/(\d+)/, (route, matches, e) => {
         </section>
       </section>
 
+      <p class="next-page">
+        <a href="#click">Next up: Click handlers that stay put &raquo;</a>
+      </p>
+
     </section>
 
 
@@ -322,7 +338,7 @@ router.addRoute(/admin\/users\/(\d+)/, (route, matches, e) => {
 
       <p>This class installs one single click handler on the whole document, and evaluates which callback to call at click time, based on the element that has been clicked. This allows us to swap out and rerender whole sections of the DOM without having to reinstall a bunch of click handlers each time. This nicely decouples render logic from the click event management logic.</p>
 
-      <p>To make sure we really only install a single click handler, you can use the singleton pattern and ask for `Click.instance()` instead of creating a new object.</p>
+      <p>To make sure we really only install a single click handler, you can use the singleton pattern and ask for <code>Click.instance()</code> instead of creating a new object.</p>
 
       <script>
         // For all clicks on 'button' elements, those existing in the DOM now or
@@ -373,6 +389,10 @@ Thimbleful.Click.instance().register('input[type=button]', {
         </section>
       </section>
 
+      <p class="next-page">
+        <a href="#dragdrop">Next up: Selecting files &raquo;</a>
+      </p>
+
     </section>
 
 
@@ -380,21 +400,28 @@ Thimbleful.Click.instance().register('input[type=button]', {
 
       <h2>File targets</h2>
 
-      <p>Elements that you can drag a file onto, or click to select a file.</p>
+      <p>This class turns an element into a drop target and a button, that you can
+      drag a file onto, or click to select a file.</p>
+
+      <p>This feature is maybe slightly out of place because you will probably not be
+      needing it for really simple websites. But it's been useful to me for several
+      fun projects, so I'm including it anyway.</p>
 
       <script>
         // This element is now a drop target, please trigger this callback on drop:
-        Thimbleful.FileTarget.instance().register('#droptargetA', function(file, data) {
-          console.log("File dropped on target A:", file.name);
-          alert("You dragged " + file.name + " to target A");
+        Thimbleful.FileTarget.instance().register('#droptargetA', (file, data) => {
+          console.log("File loaded on target A:", file);
+          console.log("File contents as Base64 encoded string:", data);
+          alert("You loaded " + file.name + " to target A");
         });
 
         // If you really disagree with the class 'dragging' when the user drags a
         // file over your element, you can change the class:
         const dragDrop = new Thimbleful.FileTarget('my-drag-class');
-        dragDrop.register('#droptargetB', function(file, data) {
-          console.log("File dropped on target B:", file.name);
-          alert("You dragged " + file.name + " to target B");
+        dragDrop.register('#droptargetB', (file, data) => {
+          console.log("File loaded on target B:", file);
+          console.log("File contents as Base64 encoded string:", data);
+          alert("You loaded " + file.name + " to target B");
         });
       </script>
 
@@ -405,9 +432,12 @@ Thimbleful.Click.instance().register('input[type=button]', {
         <section>
           <p>To make this element a file target:</p>
           <pre><code class="javascript">
-Thimbleful.DragDrop.instance().register('#droptargetA', function(e) {
-  console.log("File loaded on target A:", e);
-  alert("You loaded " + e.dataTransfer.files[0].name + " on target A");
+const fileTarget = Thimbleful.FileTarget.instance();
+
+fileTarget.register('#droptargetA', (file, data) => {
+  console.log("File loaded on target A:", file);
+  console.log("File contents as Base64 encoded string:", data);
+  alert("You loaded " + file.name + " to target A");
 });
           </code></pre>
         </section>
@@ -420,15 +450,20 @@ Thimbleful.DragDrop.instance().register('#droptargetA', function(e) {
         <section>
           <p>If you really disagree with the class 'dragging' when the user drags a file over your element, you can change the class:</p>
           <pre><code class="javascript">
-const dragDrop = new Thimbleful.DragDrop('my-drag-class');
+const fileTarget = new Thimbleful.FileTarget('my-drag-class');
 
-dragDrop.register('#droptargetB', function(e) {
-  console.log("File loaded on target B:", e);
-  alert("You loaded " + e.dataTransfer.files[0].name + " on target B");
+fileTarget.register('#droptargetB', (file, data) => {
+  console.log("File loaded on target B:", file);
+  console.log("File contents as Base64 encoded string:", data);
+  alert("You loaded " + file.name + " to target B");
 });
           </code></pre>
         </section>
       </section>
+
+      <p class="next-page">
+        That's it! <a href="https://www.github.com/timendus/thimbleful">Take a look on Github</a> if you're considering contributing!
+      </p>
 
     </section>
   </body>

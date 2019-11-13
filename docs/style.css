@@ -78,6 +78,9 @@ nav ul li a:hover, nav ul li a.active, nav ul li a:focus {
 .page.active {
   display: block;
 }
+.next-page {
+  text-align: right;
+}
 
 /* code examples */
 .example {
