@@ -1,0 +1,432 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Thimbleful</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="thimbleful.min.js"></script>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+
+    <script>
+      // Enable syntax highlighting
+      hljs.initHighlightingOnLoad();
+
+      // Enable routing, this is also our "test suite" ;)
+
+      function navigationFunc(link, matches, evnt) {
+        console.log(`Navigating to '${link}', because of this event:`, evnt, matches);
+        document.querySelector('.page.active').classList.remove('active');
+        document.querySelector('#'+link).classList.add('active');
+        window.scrollTo(0,0);
+      };
+
+      // Create a router
+      const router = new Thimbleful.Router();
+
+      // Add routes one at a time
+      router.addRoute('welcome', navigationFunc);
+
+      // Add multiple routes at once
+      router.addRoutes({
+        'router':  navigationFunc,
+        'energize': navigationFunc
+      });
+
+      // Add multiple routes to the same function
+      router.addRoutes([ 'click',
+                         'dragdrop' ], navigationFunc);
+
+      // Add route using a regular expression
+      router.addRoute(/impo(\w{3})ng/, (link, matches, evnt) => {
+        navigationFunc('importing', matches, evnt);
+      });
+    </script>
+
+  </head>
+
+  <body>
+    <header>
+      <h1>Thimbleful</h1>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="#welcome">Welcome!</a></li>
+        <li><a href="#importing">Importing</a></li>
+        <li><a href="#router">Router</a></li>
+        <li><a href="#energize">Energize</a></li>
+        <li><a href="#click">Click</a></li>
+        <li><a href="#dragdrop">Drag & Drop</a></li>
+        <li><a href="https://www.github.com/timendus/thimbleful">Find me on Github</a></li>
+      </ul>
+    </nav>
+
+
+    <section class="page active" id="welcome">
+
+      <p>thimbleful (Noun, ˈθɪmbəlˌfʊl) ⸺</p>
+
+      <ol>
+        <li>As much as a timble will hold</li>
+        <li>A very small quantity, specifically of alcoholic beverages</li>
+        <li>Just enough Javascript to make your single page app come to life</li>
+      </ol>
+
+      <h2>Welcome!</h2>
+
+      <p>For most websites all I really need is to have a menu, some routing and a couple
+      of pages. Or I just want some very basic behaviour like tabs, popups, dialogs,
+      maybe a carousel. Most websites just aren't really that complicated, and really
+      don't warrant a full Javascript framework in my opinion.</p>
+
+      <p>However, I did find myself rewriting these few bits of Javascript in some form
+      or another time and time again. Which started to get annoying.</p>
+
+      <p>So, in the spirit of <a href="http://vanilla-js.com/">Vanilla JS</a> I guess this
+      collection of snippets is my attempt at a non-framework framework 🎈</p>
+
+      <h2>"Design considerations"</h2>
+
+      <p>Thimbleful consists of a few very simple classes, the longest of which is 95 lines of code (including documentation). These classes adhere to a few principles:</p>
+
+      <ul>
+        <li>Keep it simple</li>
+        <li>Keep it small</li>
+        <li>Don't be (too) "smart"</li>
+        <li>Don't presume anything about the user's context (be configurable)</li>
+        <li>Don't introduce unnecessary dependencies</li>
+        <li>Only attach event handlers to `document` or `window`</li>
+      </ul>
+
+      <p>The last point is relevant because it allows you to rerender the whole DOM, without losing any of the Thimbleful magic.</p>
+
+      <p><small>Header image by <a href="https://www.flickr.com/photos/24495423@N04/">Chris Hertel</a>, <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> licensed.</small></p>
+
+    </section>
+
+    <section class="page" id="importing">
+
+      <h2>Importing</h2>
+
+      <p>How to import Thimbleful in your projects?</p>
+
+      <section class="example narrow">
+        <section>
+          <p>Option A: install the package as a dependency.</p>
+
+          <pre><code class="bash">
+npm install thimbleful
+          </code></pre>
+
+          <pre><code class="javascript">
+import Thimbleful from 'thimbleful';
+          </code></pre>
+
+          <p>Option B: <a href="https://github.com/Timendus/thimbleful/raw/master/dist/thimbleful.min.js">download</a> the minified version and add Thimbleful to your project:</p>
+
+          <pre><code class="html">
+&lt;script src="thimbleful.min.js"&gt;&lt;/script&gt;
+          </code></pre>
+
+          <p>Option C: link to the hosted version:</p>
+          <pre><code class="html">
+&lt;script src="https://timendus.github.io/thimbleful/thimbleful.min.js"&gt;&lt;/script&gt;
+          </code></pre>
+        </section>
+      </section>
+
+    </section>
+
+
+    <section class="page" id="router">
+
+      <h2>Router</h2>
+
+      <p>This is a really simple router implementation. It looks at the location hash and triggers the right function if you have registered that hash as a route. The menu at the top of this website is the working example for this router.</p>
+
+      <p>The biggest benefit of using this router is that you can navigate your single page app and still have a proper history. So forward and back buttons work, you can refresh and deep-link to a specific page, those kinds of things.</p>
+
+      <section class="example narrow">
+        <section>
+          <p>Create a router object:</p>
+          <pre><code class="javascript">const router = new Thimbleful.Router();</code></pre>
+
+          <p>Then, add routes. Either individually, maybe programmatically:</p>
+          <pre><code class="javascript">
+router.addRoute('welcome', navigationFunc);
+          </code></pre>
+
+          <p>Or multiple routes at once, configuration style:</p>
+          <pre><code class="javascript">
+router.addRoutes({
+  'router':   navigationFunc,
+  'activate': navigationFunc
+});
+          </code></pre>
+
+          <p>If, like in these examples, all routes lead to the same function, you can declare them in one go:</p>
+          <pre><code class="javascript">
+router.addRoutes([ 'click',
+                   'dragdrop' ], navigationFunc);
+          </code></pre>
+
+          <p>You then have to implement your own navigation or rendering functions. Maybe each page has a different function. In our case, we use this quick and dirty navigation solution: hide the active <code>.page</code> and show the one we requested.</p>
+          <pre><code class="javascript">
+function navigationFunc(route) {
+  document.querySelector('.page.active').classList.remove('active');
+  document.querySelector(`#${route}`).classList.add('active');
+  window.scrollTo(0,0);
+};
+          </code></pre>
+
+          <p>Of course you can do all of this in one go:</p>
+          <pre><code class="javascript">
+new Thimbleful.Router().addRoutes(
+  [
+    'welcome',
+    'router',
+    'energize',
+    'click',
+    'dragdrop'
+  ],
+  route => {
+    document.querySelector('.page.active').classList.remove('active');
+    document.querySelector(`#${route}`).classList.add('active');
+    window.scrollTo(0,0);
+  }
+);
+          </code></pre>
+
+          <p>Now all that's left to do is add some links with routing-power:</p>
+          <pre><code class="html">
+&lt;nav&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="#welcome"&gt;Welcome!&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#router"&gt;Router&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#energize"&gt;Energize&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#click"&gt;Click&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="#dragdrop"&gt;Drag & Drop&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+          </code></pre>
+
+          <h2>Advanced use</h2>
+
+          <p>If your routing needs are more complicated than <code>string → function</code>
+          you can use regular expressions instead of strings. The navigation
+          function gets called with three parameters: the matched route (either
+          the string or the regular expression), the regular expression matches
+          if any, and the original event that triggered the call to the
+          navigation function:</p>
+
+          <pre><code class="javascript">
+router.addRoute(/admin\/users\/(\d+)/, (route, matches, e) => {
+  console.log('This function was called because the location hash matched', route);
+  console.log('We\'re interested in user number', matches[1]);
+  console.log('This was the original navigation event:', e);
+});
+          </code></pre>
+
+        </section>
+      </section>
+
+    </section>
+
+
+    <section class="page" id="energize">
+
+      <h2>Energize</h2>
+
+      <p>This breathes life into your DOM and unlocks a set of data attributes to quickly build interfaces. Combined with some smart CSS, you can use these data attributes to create tabs, toggles, popups, caroussels, fancy radio buttons and almost anything you could want. I generally only use this for prototyping things, but you could use it for small projects.</p>
+
+      <script>
+        new Thimbleful.Energize('#activate-example');
+      </script>
+
+      <section class="example">
+        <section id="activate-example">
+          <a data-open="#left" class="active">Left</a>
+          <a data-open="#center">Center</a>
+          <a data-open="#right">Right</a>
+
+          <div class="tab active" id="left" data-group="tabs" data-follower="a[data-open='#left']">
+            <p>I'm behind the leftmost link!</p>
+            <a data-close="#left">Close me</a>
+          </div>
+
+          <div class="tab" id="center" data-group="tabs" data-follower="a[data-open='#center']">
+            <p id="colour">I'm the panel behind the center link</p>
+            <a data-toggle="#colour">Toggle me!</a>
+          </div>
+
+          <div class="tab" id="right" data-group="tabs" data-follower="a[data-open='#right']" data-timer="2000">
+            <p>I'm the last panel, behind the rightmost link</p>
+            <p>I disappear automatically after two seconds</p>
+          </div>
+        </section>
+        <section>
+          <p>You activate a certain scope in your DOM:</p>
+          <pre><code class="javascript">new Thimbleful.Energize('#example');</code></pre>
+
+          <p>And then you can use data attributes to add and remove a class from different elements in different ways:</p>
+          <pre><code class="html">
+&lt;section id="example"&gt;
+  &lt;a data-open="#left" class="active"&gt;Left&lt;/a&gt;
+  &lt;a data-open="#center"&gt;Center&lt;/a&gt;
+  &lt;a data-open="#right"&gt;Right&lt;/a&gt;
+
+  &lt;div class="tab active" id="left" data-group="tabs" data-follower="a[data-open='#left']"&gt;
+    &lt;p&gt;I'm behind the leftmost link!&lt;/p&gt;
+    &lt;a data-close="#left"&gt;Close me&lt;/a&gt;
+  &lt;/div&gt;
+
+  &lt;div class="tab" id="center" data-group="tabs" data-follower="a[data-open='#center']"&gt;
+    &lt;p id="colour"&gt;I'm the panel behind the center link&lt;/p&gt;
+    &lt;a data-toggle="#colour"&gt;Toggle me!&lt;/a&gt;
+  &lt;/div&gt;
+
+  &lt;div class="tab" id="right" data-group="tabs" data-follower="a[data-open='#right']" data-timer="2000"&gt;
+    &lt;p&gt;I'm the last panel, behind the rightmost link&lt;/p&gt;
+    &lt;p&gt;I disappear automatically after two seconds&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+          </code></pre>
+
+          <p>The default class that gets put on your elements is <code>active</code>, the default data attributes are:</p>
+
+          <ul>
+            <li><code>data-open</code> — A selector to put the <code>active</code> class on when clicked</li>
+            <li><code>data-close</code> — A selector to remove the <code>active</code> class from when clicked</li>
+            <li><code>data-toggle</code> — A selector to toggle the <code>active</code> class on when clicked</li>
+            <li><code>data-group</code> — If I get the <code>active</code> class, remove it from others in my group</li>
+            <li><code>data-timer</code> — If I get the <code>active</code> class, remove it again after this many milliseconds</li>
+            <li><code>data-follower</code> — A selector for another element that follows my behaviour</li>
+          </ul>
+
+          <p>If you wish, you can override the class name and the names of all the attributes as options to the <code>Thimbleful.Energize</code> constructor.</p>
+        </section>
+      </section>
+
+    </section>
+
+
+    <section class="page" id="click">
+
+      <h2>Click</h2>
+
+      <p>This class installs one single click handler on the whole document, and evaluates which callback to call at click time, based on the element that has been clicked. This allows us to swap out and rerender whole sections of the DOM without having to reinstall a bunch of click handlers each time. This nicely decouples render logic from the click event management logic.</p>
+
+      <p>To make sure we really only install a single click handler, you can use the singleton pattern and ask for `Click.instance()` instead of creating a new object.</p>
+
+      <script>
+        // For all clicks on 'button' elements, those existing in the DOM now or
+        // created in the future, please trigger this callback:
+        Thimbleful.Click.instance().register('button', function(e) {
+          console.log('Button clicked!', e);
+          alert('Button clicked!');
+        });
+
+        // For all clicks on 'input' elements with type 'button', those existing
+        // in the DOM now or created in the future, please trigger these different
+        // callbacks:
+        Thimbleful.Click.instance().register('input[type=button]', {
+          mousedown: (e) => console.log('Mouse down on input type button!', e),
+          mouseup:   (e) => console.log('Mouse up on input type button!', e),
+          click:     (e) => { console.log('Input type button clicked!', e); alert('Input type button clicked!') }
+        });
+      </script>
+
+      <section class="example">
+        <section>
+          <button>Click me!</button>
+        </section>
+        <section>
+          <p>For all clicks on 'button' elements, those existing in the DOM now or created in the future, please trigger this callback:</p>
+          <pre><code class="javascript">
+Thimbleful.Click.instance().register('button', function(e) {
+  console.log('Button clicked!', e);
+  alert('Button clicked!');
+});
+          </code></pre>
+        </section>
+      </section>
+
+      <section class="example">
+        <section>
+          <input type="button" value="Click me too!"/>
+        </section>
+        <section>
+          <p>For all clicks on 'input' elements with type 'button', those existing in the DOM now or created in the future, please trigger these different callbacks:</p>
+          <pre><code class="javascript">
+Thimbleful.Click.instance().register('input[type=button]', {
+  mousedown: (e) => console.log('Mouse down on input type button!', e),
+  mouseup:   (e) => console.log('Mouse up on input type button!', e),
+  click:     (e) => { console.log('Input type button clicked!', e); alert('Input type button clicked!') }
+});
+          </code></pre>
+        </section>
+      </section>
+
+    </section>
+
+
+    <section class="page" id="dragdrop">
+
+      <h2>File targets</h2>
+
+      <p>Elements that you can drag a file onto, or click to select a file.</p>
+
+      <script>
+        // This element is now a drop target, please trigger this callback on drop:
+        Thimbleful.FileTarget.instance().register('#droptargetA', function(file, data) {
+          console.log("File dropped on target A:", file.name);
+          alert("You dragged " + file.name + " to target A");
+        });
+
+        // If you really disagree with the class 'dragging' when the user drags a
+        // file over your element, you can change the class:
+        const dragDrop = new Thimbleful.FileTarget('my-drag-class');
+        dragDrop.register('#droptargetB', function(file, data) {
+          console.log("File dropped on target B:", file.name);
+          alert("You dragged " + file.name + " to target B");
+        });
+      </script>
+
+      <section class="example">
+        <section>
+          <div class="droptarget" id="droptargetA">Drop target A</div>
+        </section>
+        <section>
+          <p>To make this element a file target:</p>
+          <pre><code class="javascript">
+Thimbleful.DragDrop.instance().register('#droptargetA', function(e) {
+  console.log("File loaded on target A:", e);
+  alert("You loaded " + e.dataTransfer.files[0].name + " on target A");
+});
+          </code></pre>
+        </section>
+      </section>
+
+      <section class="example">
+        <section>
+          <div class="droptarget" id="droptargetB">Drop target B</div>
+        </section>
+        <section>
+          <p>If you really disagree with the class 'dragging' when the user drags a file over your element, you can change the class:</p>
+          <pre><code class="javascript">
+const dragDrop = new Thimbleful.DragDrop('my-drag-class');
+
+dragDrop.register('#droptargetB', function(e) {
+  console.log("File loaded on target B:", e);
+  alert("You loaded " + e.dataTransfer.files[0].name + " on target B");
+});
+          </code></pre>
+        </section>
+      </section>
+
+    </section>
+  </body>
+</html>
