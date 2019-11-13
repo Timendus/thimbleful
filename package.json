@@ -1,5 +1,5 @@
 {
-  "name": "Thimbleful",
+  "name": "thimbleful",
   "version": "0.0.1",
   "description": "Just enough Javascript to make your single page app come to life",
   "main": "src/index.js",
