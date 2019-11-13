@@ -1,7 +1,7 @@
 thimbleful (Noun, ˈθɪmbəlˌfʊl) ⸺
 
 1. As much as a timble will hold
-2. A very small quantity, esp. of alcoholic beverages
+2. A very small quantity, specifically of alcoholic beverages
 3. Just enough Javascript to make your single page app come to life
 
 ## Welcome!
