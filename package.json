@@ -2,7 +2,8 @@
   "name": "Thimbleful",
   "version": "0.0.1",
   "description": "Just enough Javascript to make your single page app come to life",
-  "main": "dist/thimbleful.min.js",
+  "main": "src/index.js",
+  "browser": "dist/thimbleful.min.js",
   "scripts": {
     "start": "webpack-dev-server",
     "build": "webpack --mode production"
