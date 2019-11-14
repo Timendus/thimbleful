@@ -1,6 +1,6 @@
 {
   "name": "thimbleful",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A non-framework framework. Just enough Javascript to make your single page app come to life.",
   "main": "src/index.js",
   "scripts": {
