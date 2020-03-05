@@ -173,8 +173,8 @@ router.addRoute('welcome', navigationFunc);
           <p>Or multiple routes at once, configuration style:</p>
           <pre><code class="javascript">
 router.addRoutes({
-  'router':   navigationFunc,
-  'activate': navigationFunc
+  router:   navigationFunc,
+  activate: navigationFunc
 });
           </code></pre>
 
@@ -193,9 +193,10 @@ function navigationFunc(route) {
 };
           </code></pre>
 
-          <p>Of course you can do all of this in one go:</p>
+          <p>If you like, you can pass any parameters that you would use with
+          <code>addRoutes</code> to the constructor too:</p>
           <pre><code class="javascript">
-new Thimbleful.Router().addRoutes(
+new Thimbleful.Router(
   [
     'welcome',
     'router',
@@ -226,6 +227,8 @@ new Thimbleful.Router().addRoutes(
 
           <h2>Advanced use</h2>
 
+          <h3>Regular expressions</h3>
+
           <p>If your routing needs are more complicated than <code>string → function</code>
           you can use regular expressions instead of strings. The navigation
           function gets called with three parameters: the matched route (either
@@ -241,6 +244,49 @@ router.addRoute(/admin\/users\/(\d+)/, (route, matches, e) => {
 });
           </code></pre>
 
+          <h3>Nested routers</h3>
+
+          <p>For readability or for nested components, you can nest router
+          instances. This can be done in two ways: either by registering a route
+          that leads to a router instance:</p>
+          <pre><code class="javascript">
+const rootRouter = new Thimbleful.Router();
+
+rootRouter.addRoutes({
+  public: new Thimbleful.Router({
+    login:  loginFunc,
+    logout: logoutFunc
+  })
+});
+          </code></pre>
+          <pre><code class="html">
+&lt;a href="#public/login"&gt;Click here to log in&lt;/a&gt;
+          </code></pre>
+
+          <p>...or by calling <code>route</code> on the nested router:</p>
+          <pre><code class="javascript">
+const rootRouter = new Thimbleful.Router();
+
+const privateRouter = new Thimbleful.Router({
+  dashboard: dashboardFunc,
+  users:     usersFunc
+});
+
+rootRouter.addRoute(/private\/(.*)/, (route, matches, evnt) => {
+  if (!loggedIn) {
+    window.location.hash = 'public/login';
+    return;
+  }
+
+  privateRouter.route(matches[1], evnt);
+});
+          </code></pre>
+          <pre><code class="html">
+&lt;a href="#private/dashboard"&gt;Go to your dashboard&lt;/a&gt;
+          </code></pre>
+
+          <p>Please note that you always have to instantiate the root router
+          first, so it binds itself to the right events.</p>
         </section>
       </section>
 
