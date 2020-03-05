@@ -8,15 +8,19 @@
  */
 
 import Click from './click';
+let installed = false;
 
 export default class Router {
 
-  constructor() {
+  constructor(routes = false, handler = null) {
     this._routes = [];
+    if (routes) this.addRoutes(routes, handler);
+    if (installed) return;
 
     Click.instance().register('a[href]',  (e) => this._handleClick(e));
     window.addEventListener('hashchange', (e) => this._handleNavigationEvent(e));
     window.addEventListener('load',       (e) => this._handleNavigationEvent(e));
+    installed = true;
   }
 
   addRoute(route, handler) {
@@ -30,32 +34,61 @@ export default class Router {
       Object.keys(routes).forEach(route => this.addRoute(route, routes[route]));
   }
 
+  route(route, evnt) {
+    const match = this._matchingRoute(route);
+    if (match && match.router)  match.router.route(match.subpath, evnt);
+    if (match && match.handler) match.handler(match.route, match.matches, evnt);
+  }
+
   _handleClick(evnt) {
     let link = evnt.target.getAttribute('href');
-    if (!this._matchingLink(link)) return;
+    if (!link.startsWith('#')) return;       // Only handle hash links
+    link = link.substr(1);
+    if (!this._matchingRoute(link)) return;  // Only handle registered routes
     window.location.hash = link;
-    evnt.preventDefault();
+    evnt.preventDefault();                   // Prevent from jumping to anchor
   }
 
   _handleNavigationEvent(evnt) {
-    let link = window.location.hash;
-    if (!(link = this._matchingLink(link))) return;
-    let handler = link.route[1]
-    if (handler) handler(link.route[0], link.matches, evnt);
+    let hash = window.location.hash
+    if (hash.startsWith('#')) hash = hash.substr(1);
+    this.route(hash, evnt);
   }
 
-  _matchingLink(hash) {
-    if (!hash) return false;
-    if (!hash.substr(0,1) == "#") return false;
-    for (const route of this._routes) {
-      if (route[0] instanceof RegExp) {
-        const matches = hash.substr(1).match(route[0]);
-        if (matches) return {route, matches};
-      } else {
-        if (route[0] == hash.substr(1)) return {route, matches: null}
-      }
-    }
-    return false;
+  _matchingRoute(route) {
+    return route && ( this._subRouterMatch(route) ||
+                      this._stringMatch(route)    ||
+                      this._regExpMatch(route)       );
+  }
+
+  _subRouterMatch(route) {
+    const match = this._routes.filter(r => r[1] instanceof Router)
+                              .find(r => route.startsWith(r[0] + '/') || route == r[0]);
+
+    return match && {
+      router:  match[1],
+      subpath: route.substr(match[0].length + 1)
+    };
+  }
+
+  _stringMatch(route) {
+    const match = this._routes.find(r => route == r[0]);
+
+    return match && {
+      route:   match[0],
+      handler: match[1]
+    };
+  }
+
+  _regExpMatch(route) {
+    const match = this._routes.filter(r => r[0] instanceof RegExp)
+                              .find(r => route.match(r[0]));
+
+    return match && {
+      route:   match[0],
+      handler: match[1],
+      matches: route.match(match[0])
+    };
   }
 
 }
