@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Thimbleful test</title>
+    <script src="../thimbleful.min.js"></script>
+    <script type="text/javascript">
+      window.addEventListener('load', () => {
+        const content = document.getElementById('content');
+        let loggedIn = false;
+
+        const rootRouter = new Thimbleful.Router({
+          public: new Thimbleful.Router({
+            error: () => content.innerHTML = `Error: You are not authorized`,
+            login: () => {
+              content.innerHTML = `You have been logged in`;
+              loggedIn = true;
+            },
+            logout: () => {
+              content.innerHTML = `You have been logged out`;
+              loggedIn = false;
+            }
+          })
+        });
+
+        const privateRouter = new Thimbleful.Router({
+          dashboard: () => content.innerHTML = `Dashboard here`,
+          users:     () => content.innerHTML = `User list here`
+        });
+
+        rootRouter.addRoute(/private\/(.*)/, (route, matches, evnt) => {
+          if (!loggedIn)
+            return window.location.hash = 'public/error';
+
+          privateRouter.route(matches[1], evnt);
+        });
+
+        rootRouter.install();
+      });
+    </script>
+  </head>
+
+  <body>
+    <ul>
+      <li><a href="#public/login">log in</a></li>
+      <li><a href="#public/logout">log out</a></li>
+    </ul>
+
+    <h2>Menu</h2>
+    <ul>
+      <li><a href="#private/dashboard">dashboard</a></li>
+      <li><a href="#private/users">users</a></li>
+    </ul>
+
+    <section id="content"></section>
+  </body>
+
+</html>
