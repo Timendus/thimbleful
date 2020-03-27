@@ -24,7 +24,7 @@
       };
 
       // Create a router
-      const router = new Thimbleful.Router();
+      const router = new Thimbleful.Router().install();
 
       // Add routes one at a time
       router.addRoute('welcome', navigationFunc);
@@ -162,8 +162,8 @@ import Thimbleful from 'thimbleful';
 
       <section class="example narrow">
         <section>
-          <p>Create a router object:</p>
-          <pre><code class="javascript">const router = new Thimbleful.Router();</code></pre>
+          <p>Create and install a router object:</p>
+          <pre><code class="javascript">const router = new Thimbleful.Router().install();</code></pre>
 
           <p>Then, add routes. Either individually, maybe programmatically:</p>
           <pre><code class="javascript">
@@ -188,7 +188,7 @@ router.addRoutes([ 'click',
           <pre><code class="javascript">
 function navigationFunc(route) {
   document.querySelector('.page.active').classList.remove('active');
-  document.querySelector(`#${route}`).classList.add('active');
+  document.getElementById(route).classList.add('active');
   window.scrollTo(0,0);
 };
           </code></pre>
@@ -209,7 +209,26 @@ new Thimbleful.Router(
     document.querySelector(`#${route}`).classList.add('active');
     window.scrollTo(0,0);
   }
-);
+).install();
+          </code></pre>
+          <p>This is equivalent to:</p>
+          <pre><code class="javascript">
+new Thimbleful.Router()
+  .install()
+  .addRoutes(
+    [
+      'welcome',
+      'router',
+      'energize',
+      'click',
+      'dragdrop'
+    ],
+    route => {
+      document.querySelector('.page.active').classList.remove('active');
+      document.querySelector(`#${route}`).classList.add('active');
+      window.scrollTo(0,0);
+    }
+  );
           </code></pre>
 
           <p>Now all that's left to do is add some links with routing-power:</p>
@@ -250,14 +269,14 @@ router.addRoute(/admin\/users\/(\d+)/, (route, matches, e) => {
           instances. This can be done in two ways: either by registering a route
           that leads to a router instance:</p>
           <pre><code class="javascript">
-const rootRouter = new Thimbleful.Router();
-
-rootRouter.addRoutes({
-  public: new Thimbleful.Router({
-    login:  loginFunc,
-    logout: logoutFunc
-  })
-});
+new Thimbleful.Router()
+  .install()
+  .addRoutes({
+    public: new Thimbleful.Router({
+      login:  loginFunc,
+      logout: logoutFunc
+    })
+  });
           </code></pre>
           <pre><code class="html">
 &lt;a href="#public/login"&gt;Click here to log in&lt;/a&gt;
@@ -265,28 +284,29 @@ rootRouter.addRoutes({
 
           <p>...or by calling <code>route</code> on the nested router:</p>
           <pre><code class="javascript">
-const rootRouter = new Thimbleful.Router();
-
 const privateRouter = new Thimbleful.Router({
   dashboard: dashboardFunc,
   users:     usersFunc
 });
 
-rootRouter.addRoute(/private\/(.*)/, (route, matches, evnt) => {
-  if (!loggedIn) {
-    window.location.hash = 'public/login';
-    return;
-  }
+new Thimbleful.Router()
+  .install()
+  .addRoute(/private\/(.*)/, (route, matches, evnt) => {
+    if (!loggedIn) {
+      window.location.hash = 'public/login';
+      return;
+    }
 
-  privateRouter.route(matches[1], evnt);
-});
+    privateRouter.route(matches[1], evnt);
+  });
           </code></pre>
           <pre><code class="html">
 &lt;a href="#private/dashboard"&gt;Go to your dashboard&lt;/a&gt;
           </code></pre>
 
-          <p>Please note that you always have to instantiate the root router
-          first, so it binds itself to the right events.</p>
+          <p>Please note that the router that you call the <code>install</code>
+          function on is the one that will be the root router. This router binds
+          itself to the right events.</p>
         </section>
       </section>
 

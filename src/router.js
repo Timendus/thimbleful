@@ -8,23 +8,24 @@
  */
 
 import Click from './click';
-let installed = false;
 
 export default class Router {
 
   constructor(routes = false, handler = null) {
     this._routes = [];
     if (routes) this.addRoutes(routes, handler);
-    if (installed) return;
+  }
 
+  install() {
     Click.instance().register('a[href]',  (e) => this._handleClick(e));
     window.addEventListener('hashchange', (e) => this._handleNavigationEvent(e));
     window.addEventListener('load',       (e) => this._handleNavigationEvent(e));
-    installed = true;
+    return this;
   }
 
   addRoute(route, handler) {
     this._routes.push([route, handler]);
+    return this;
   }
 
   addRoutes(routes, handler = null) {
@@ -32,12 +33,13 @@ export default class Router {
       routes.forEach((route) => this.addRoute(route, handler));
     else
       Object.keys(routes).forEach(route => this.addRoute(route, routes[route]));
+    return this;
   }
 
   route(route, evnt) {
     const match = this._matchingRoute(route);
-    if (match && match.router)  match.router.route(match.subpath, evnt);
-    if (match && match.handler) match.handler(match.route, match.matches, evnt);
+    if (match && match.router)  return match.router.route(match.subpath, evnt);
+    if (match && match.handler) return match.handler(match.route, match.matches, evnt);
   }
 
   _handleClick(evnt) {
