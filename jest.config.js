@@ -4,5 +4,6 @@ module.exports = {
   preset: 'jest-puppeteer',
   globals: {
     URL: `http://localhost:${config.testPort}`
-  }
+  },
+  verbose: true
 }
