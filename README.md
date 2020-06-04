@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Timendus/thimbleful.svg?branch=master)](https://travis-ci.org/Timendus/thimbleful)
+
 thimbleful (Noun, ˈθɪmbəlˌfʊl) ⸺
 
 1. As much as a timble will hold
