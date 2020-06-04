@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "A non-framework framework. Just enough Javascript to make your single page app come to life.",
   "main": "src/index.js",
+  "config": {
+    "testPort": 8888
+  },
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "test-server": "webpack-dev-server --mode production --port $npm_package_config_testPort",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
