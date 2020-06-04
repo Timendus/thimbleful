@@ -5,5 +5,6 @@ module.exports = {
   globals: {
     URL: `http://localhost:${config.testPort}/`
   },
-  verbose: true
+  verbose: true,
+  setupFilesAfterEnv: ['./jest.setup.js']
 }

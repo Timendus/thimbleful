@@ -10,7 +10,7 @@
     "start": "webpack-dev-server",
     "build": "webpack --mode production",
     "test-server": "webpack-dev-server --mode production --port $npm_package_config_testPort",
-    "test": "jest --runInBand",
+    "test": "jest --maxWorkers=2",
     "watch-tests": "jest --watch"
   },
   "repository": {
