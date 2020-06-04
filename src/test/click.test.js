@@ -1,10 +1,7 @@
 describe('Click class', () => {
 
-  beforeAll(async () => {
-    await page.goto(URL);
-  });
-
   beforeEach(async () => {
+    await page.goto(URL);
     await page.reload();
     await page.click('a[href="#click"]');
   });

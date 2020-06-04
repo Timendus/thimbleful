@@ -2,11 +2,8 @@ const { getClassList } = require('./helpers');
 
 describe('Energize class', () => {
 
-  beforeAll(async () => {
-    await page.goto(URL);
-  });
-
   beforeEach(async () => {
+    await page.goto(URL);
     await page.reload();
     await page.click('a[href="#energize"]');
   });
