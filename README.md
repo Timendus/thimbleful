@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Timendus/thimbleful.svg?branch=master)](https://travis-ci.org/Timendus/thimbleful)
+[![Build Status](https://travis-ci.com/Timendus/thimbleful.svg?branch=master)](https://travis-ci.com/Timendus/thimbleful)
 
 thimbleful (Noun, ˈθɪmbəlˌfʊl) ⸺
 
