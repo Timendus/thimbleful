@@ -52,6 +52,8 @@
  *
  * If you wish, you can override the class name and the names of all the
  * attributes as options to the `Energize` constructor.
+ *
+ * @module
  */
 
 export default class Energize {

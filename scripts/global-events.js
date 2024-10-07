@@ -1,20 +1,19 @@
-/*
+/**
  * This module installs singular event handlers on the document, and evaluates
  * which callback to call when the event fires, based on the element the event
  * originates from. This allows us to swap out and rerender whole sections of
  * the DOM without having to reinstall a bunch of event handlers each time. This
  * nicely decouples the render logic from the event management logic.
  *
- * Usage:
- *
- * ```javascript
+ * @example
  * import ge from "./global-events.js";
  *
  * ge.addEventListener("button#click-me", "click", (event, element) => {
  *   console.log(event);   // Will give back the click event object
  *   console.log(element); // Will give back the button#click-me element that was clicked
  * });
- * ```
+ *
+ * @module
  */
 
 const VALID_EVENTS = ["click", "change", "keyup"];

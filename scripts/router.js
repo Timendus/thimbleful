@@ -173,6 +173,8 @@
  * Please note that the router that you call the `install` function on is the
  * one that will be the root router. This router binds itself to the right
  * events.
+ *
+ * @module
  */
 
 export default class Router {

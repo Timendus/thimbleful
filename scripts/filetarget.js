@@ -1,4 +1,4 @@
-/*
+/**
  * This class installs global event handlers for dragging and dropping a file or
  * clicking to upload a file. The relevant callback gets called, based on the
  * element that the file was dropped on or selected through. This allows us to
@@ -6,9 +6,10 @@
  * bunch of event handlers each time. This nicely decouples the render logic
  * from the drag event management logic.
  *
- * Usage:
+ * Also, a class `dragging` will be applied to the element when the user drags a
+ * file over it. The name of this class can be changed below if necessary.
  *
- * ```javascript
+ * @example
  * import ft from "./filetarget.js";
  *
  * ft.setEventListener("div#file-thing", (file, element) = {
@@ -25,8 +26,7 @@
  * });
  * ```
  *
- * Also, a class `dragging` will be applied to the element when the user drags a
- * file over it. The name of this class can be changed below if necessary.
+ * @module
  */
 
 const DRAG_CLASS = "dragging";

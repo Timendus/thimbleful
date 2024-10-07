@@ -4,33 +4,32 @@
  * available in the browser, it will still work, but basically ignore all your
  * preferences.
  *
- * Usage:
+ * @example
+ * import files from "save-load-file.js";
  *
- * ```javascript
- *   import files from "save-load-file.js";
+ * await files.save({
+ *   suggestedName: "Untitled.extension",
+ *   contents: "I'm in your files",
+ *   startIn: "documents",
+ *   types: [{
+ *     description: 'My very special file type',
+ *     accept: {
+ *       'text/plain': ['.extension'],
+ *     },
+ *   }],
+ * });
  *
- *   await files.save({
- *     suggestedName: "Untitled.extension",
- *     contents: "I'm in your files",
- *     startIn: "documents",
- *     types: [{
- *       description: 'My very special file type',
- *       accept: {
- *         'text/plain': ['.extension'],
- *       },
- *     }],
- *   });
+ * await files.load({
+ *   startIn: "documents",
+ *   types: [{
+ *     description: 'My very special file type',
+ *     accept: {
+ *       'text/plain': ['.extension'],
+ *     },
+ *   }],
+ * });
  *
- *   await files.load({
- *     startIn: "documents",
- *     types: [{
- *       description: 'My very special file type',
- *       accept: {
- *         'text/plain': ['.extension'],
- *       },
- *     }],
- *   });
- * ```
+ * @module
  */
 
 /**

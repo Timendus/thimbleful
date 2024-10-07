@@ -8,15 +8,14 @@
  * Main differences with the localStorage API: this is async and it can store
  * complicated objects, not just strings.
  *
- * Usage:
+ * @example
+ * import IndexedDB from 'indexedDB.js';
+ * const db = await IndexedDB.connect("my-database");
+ * await db.setItem('some key', 'some value');
+ * console.log(await db.getItem('some key'));
+ * await db.removeItem('some key');
  *
- * ```javascript
- *   import IndexedDB from 'indexedDB.js';
- *   const db = await IndexedDB.connect("my-database");
- *   await db.setItem('some key', 'some value');
- *   console.log(await db.getItem('some key'));
- *   await db.removeItem('some key');
- * ```
+ * @module
  */
 
 export default class IndexedDB {
@@ -27,6 +26,7 @@ export default class IndexedDB {
 
   /**
    * Connect to an IndexedDB database
+   * @public
    * @param {string} name Name of the database and the table to use
    * @returns {Promise<IndexedDB>} A promise to a connected database
    */
