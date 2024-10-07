@@ -17,10 +17,11 @@ collection of snippets is my attempt at a non-framework framework 🎈
 
 ## How to use
 
-Copy whatever looks interesting [from this repository](./scripts) into your own
-project. Modify it to fit your needs where needed. The documentation is in the
-comments, and gets generated to a website automatically, which [can be browsed
-online here](https://timendus.github.io/thimbleful/).
+Copy whatever looks interesting [from this
+repository](https://github.com/Timendus/thimbleful/tree/master/scripts) into
+your own project. Modify it to fit your needs where needed. The documentation is
+in the comments, and gets generated to a website automatically, which [can be
+browsed online here](https://timendus.github.io/thimbleful/).
 
 **Note that it is GPL v3 licensed**, so make sure you release your changes to
 the files under the GPL too. The easiest way to do that is probably to make a
