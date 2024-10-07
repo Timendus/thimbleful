@@ -15,6 +15,9 @@ or another time and time again. Which started to get annoying.
 So, in the spirit of [Vanilla JS](http://vanilla-js.com/), I guess this
 collection of snippets is my attempt at a non-framework framework 🎈
 
+Automatically generated documentation for these scripts [can be browsed
+here](https://timendus.github.io/thimbleful/jsdoc/).
+
 ## How to use
 
 Copy whatever looks interesting from this repository into your own project.
