@@ -15,13 +15,12 @@ or another time and time again. Which started to get annoying.
 So, in the spirit of [Vanilla JS](http://vanilla-js.com/), I guess this
 collection of snippets is my attempt at a non-framework framework 🎈
 
-Automatically generated documentation for these scripts [can be browsed
-here](https://timendus.github.io/thimbleful/).
-
 ## How to use
 
-Copy whatever looks interesting from this repository into your own project.
-Modify it to fit your needs where needed. The documentation is in the comments.
+Copy whatever looks interesting [from this repository](./scripts) into your own
+project. Modify it to fit your needs where needed. The documentation is in the
+comments, and gets generated to a website automatically, which [can be browsed
+online here](https://timendus.github.io/thimbleful/).
 
 **Note that it is GPL v3 licensed**, so make sure you release your changes to
 the files under the GPL too. The easiest way to do that is probably to make a
