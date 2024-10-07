@@ -16,7 +16,7 @@ So, in the spirit of [Vanilla JS](http://vanilla-js.com/), I guess this
 collection of snippets is my attempt at a non-framework framework 🎈
 
 Automatically generated documentation for these scripts [can be browsed
-here](https://timendus.github.io/thimbleful/jsdoc/).
+here](https://timendus.github.io/thimbleful/).
 
 ## How to use
 

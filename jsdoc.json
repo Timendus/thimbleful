@@ -16,7 +16,7 @@
     "monospaceLinks": false
   },
   "opts": {
-    "destination": "docs/jsdoc",
+    "destination": "docs",
     "readme": "./README.md"
   }
 }
