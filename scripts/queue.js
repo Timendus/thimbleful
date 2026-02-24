@@ -30,12 +30,6 @@
  */
 
 export default class Queue {
-  /**
-   * Create a new Queue with the given capacity.
-   *
-   * @param {number} capacity - The maximum number of items that can be in the
-   * queue at once
-   */
   constructor(capacity) {
     this.capacity = capacity;
     this.queue = [];
